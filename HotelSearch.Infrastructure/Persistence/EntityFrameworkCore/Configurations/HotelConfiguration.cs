@@ -39,6 +39,10 @@ public class HotelConfiguration : IEntityTypeConfiguration<Hotel>
                 .IsRequired();
         });
         
+        builder.HasIndex(h => new { h.Name, h.Location.Latitude, h.Location.Longitude })
+            .IsUnique()
+            .HasDatabaseName("ix_hotels_name_location_unique");
+        
         builder.HasIndex(h => h.Name)
             .HasDatabaseName("ix_hotels_name");
         

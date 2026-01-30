@@ -23,6 +23,15 @@ public class HotelService : IHotelService
     public async Task<HotelDto> CreateAsync(CreateHotelDto createHotelDto, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Creating hotel: {HotelName}", createHotelDto.Name);
+        
+        var exists = await _hotelRepository.ExistsByNameAndLocationAsync(
+            createHotelDto.Name, 
+            createHotelDto.Latitude, 
+            createHotelDto.Longitude, 
+            cancellationToken);
+        
+        if (exists)
+            throw new DuplicateHotelException($"Hotel '{createHotelDto.Name}' already exists at location ({createHotelDto.Latitude}, {createHotelDto.Longitude})");
 
         var hotel = createHotelDto.ToDomain();
         var created = await _hotelRepository.AddAsync(hotel, cancellationToken);
@@ -45,6 +54,15 @@ public class HotelService : IHotelService
         var hotel = await _hotelRepository.GetByIdAsync(id, cancellationToken);
         if (hotel is null)
             throw new NotFoundException($"Hotel with ID {id} not found");
+
+        var exists = await _hotelRepository.ExistsByNameAndLocationAsync(
+            updateHotelDto.Name, 
+            updateHotelDto.Latitude, 
+            updateHotelDto.Longitude,
+            cancellationToken);
+
+        if (exists)
+            throw new DuplicateHotelException($"Hotel '{updateHotelDto.Name}' already exists at location ({updateHotelDto.Latitude}, {updateHotelDto.Longitude})");
 
         hotel = hotel.ToDomainUpdate(updateHotelDto);
         await _hotelRepository.UpdateAsync(hotel, cancellationToken);
