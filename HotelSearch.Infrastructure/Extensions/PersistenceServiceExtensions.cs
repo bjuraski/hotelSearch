@@ -11,8 +11,10 @@ public static class PersistenceServiceExtensions
 {
     public static IServiceCollection AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddSingleton<IHotelSearchDbContextFactory, HotelSearchDbContextFactory>();
         services.AddDbContext<HotelSearchDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("HotelSearchDbConnection")));
+            options.UseNpgsql(configuration.GetConnectionString("HotelSearchDbConnection"),
+                b => b.MigrationsAssembly("HotelSearch.Infrastructure")));
 
         services.AddSingleton<IHotelRepository, InMemoryHotelRepository>();
         services.AddScoped<IHotelRepository, EntityFrameworkCoreHotelRepository>();

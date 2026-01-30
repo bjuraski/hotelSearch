@@ -7,25 +7,27 @@ namespace HotelSearch.Infrastructure.Persistence.EntityFrameworkCore;
 
 public class EntityFrameworkCoreHotelRepository : IHotelRepository
 {
-    private readonly HotelSearchDbContext _dbContext;
+    private readonly IHotelSearchDbContextFactory _dbContextFactory;
     private readonly ILogger<EntityFrameworkCoreHotelRepository> _logger;
 
-    public EntityFrameworkCoreHotelRepository(HotelSearchDbContext dbContext, ILogger<EntityFrameworkCoreHotelRepository> logger)
+    public EntityFrameworkCoreHotelRepository(IHotelSearchDbContextFactory dbContextFactory, ILogger<EntityFrameworkCoreHotelRepository> logger)
     {
-        _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+        _dbContextFactory = dbContextFactory ?? throw new ArgumentNullException(nameof(dbContextFactory));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     public async Task<Hotel?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Hotels
+        await using var dbContext = _dbContextFactory.CreateReadOnly();
+        return await dbContext.Hotels
             .AsNoTracking()
             .FirstOrDefaultAsync(h => h.Id == id, cancellationToken);
     }
 
     public async Task<IReadOnlyList<Hotel>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Hotels
+        await using var dbContext = _dbContextFactory.CreateReadOnly();
+        return await dbContext.Hotels
             .AsNoTracking()
             .ToListAsync(cancellationToken);
     }
@@ -34,9 +36,10 @@ public class EntityFrameworkCoreHotelRepository : IHotelRepository
     {
         if (hotel is null)
             throw new ArgumentNullException(nameof(hotel));
-
-        _dbContext.Hotels.Add(hotel);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        
+        await using var dbContext = _dbContextFactory.Create();
+        dbContext.Hotels.Add(hotel);
+        await dbContext.SaveChangesAsync(cancellationToken);
         
         _logger.LogDebug("Hotel with ID: {HotelId} added to database", hotel.Id);
         
@@ -48,15 +51,17 @@ public class EntityFrameworkCoreHotelRepository : IHotelRepository
         if (hotel is null)
             throw new ArgumentNullException(nameof(hotel));
 
-        _dbContext.Hotels.Update(hotel);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await using var dbContext = _dbContextFactory.Create();
+        dbContext.Hotels.Update(hotel);
+        await dbContext.SaveChangesAsync(cancellationToken);
         
         _logger.LogDebug("Hotel with ID: {HotelId} updated in database", hotel.Id);
     }
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        await _dbContext.Hotels
+        await using var dbContext = _dbContextFactory.Create();
+        await dbContext.Hotels
             .Where(h => h.Id == id)
             .ExecuteDeleteAsync(cancellationToken);
         
@@ -65,13 +70,15 @@ public class EntityFrameworkCoreHotelRepository : IHotelRepository
 
     public async Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Hotels
+        await using var dbContext = _dbContextFactory.CreateReadOnly();
+        return await dbContext.Hotels
             .AnyAsync(h => h.Id == id, cancellationToken);
     }
 
     public async Task<bool> ExistsByNameAndLocationAsync(string name, double latitude, double longitude, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Hotels
+        await using var dbContext = _dbContextFactory.CreateReadOnly();
+        return await dbContext.Hotels
             .AnyAsync(h => 
                     EF.Functions.ILike(h.Name, name) && 
                     Math.Abs(h.Location.Latitude - latitude) < 0.000001 && 
