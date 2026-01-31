@@ -1,0 +1,1292 @@
+{
+	"info": {
+		"_postman_id": "hotel-search-api-collection",
+		"name": "Hotel Search API",
+		"description": "Complete API collection for Hotel Search application with CRUD operations and intelligent proximity-based search.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://localhost:5001",
+			"type": "string"
+		},
+		{
+			"key": "hotelId",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Seed Data - Create Hotels",
+			"description": "Run all requests in this folder to populate the database with test hotels for search testing.",
+			"item": [
+				{
+					"name": "01 - Grand Hotel Zagreb",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Grand Hotel Zagreb\",\n    \"price\": 150.00,\n    \"latitude\": 45.8150,\n    \"longitude\": 15.9819\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "02 - Hotel Esplanade Zagreb",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Hotel Esplanade Zagreb\",\n    \"price\": 220.00,\n    \"latitude\": 45.8047,\n    \"longitude\": 15.9780\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "03 - Budget Inn Zagreb",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Budget Inn Zagreb\",\n    \"price\": 45.00,\n    \"latitude\": 45.8131,\n    \"longitude\": 15.9772\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "04 - Sheraton Zagreb",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Sheraton Zagreb\",\n    \"price\": 185.00,\n    \"latitude\": 45.8069,\n    \"longitude\": 15.9614\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "05 - Hotel Dubrovnik Zagreb",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Hotel Dubrovnik Zagreb\",\n    \"price\": 125.00,\n    \"latitude\": 45.8133,\n    \"longitude\": 15.9775\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "06 - Seaside Resort Split",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Seaside Resort Split\",\n    \"price\": 200.00,\n    \"latitude\": 43.5081,\n    \"longitude\": 16.4402\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "07 - Hotel Marjan Split",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Hotel Marjan Split\",\n    \"price\": 165.00,\n    \"latitude\": 43.5125,\n    \"longitude\": 16.4362\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "08 - Hostel Split Center",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Hostel Split Center\",\n    \"price\": 35.00,\n    \"latitude\": 43.5088,\n    \"longitude\": 16.4411\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "09 - Le Meridien Lav Split",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Le Meridien Lav Split\",\n    \"price\": 280.00,\n    \"latitude\": 43.4969,\n    \"longitude\": 16.5156\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "10 - Hotel Excelsior Dubrovnik",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Hotel Excelsior Dubrovnik\",\n    \"price\": 350.00,\n    \"latitude\": 42.6389,\n    \"longitude\": 18.1131\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "11 - Budget Inn Dubrovnik",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Budget Inn Dubrovnik\",\n    \"price\": 75.50,\n    \"latitude\": 42.6507,\n    \"longitude\": 18.0944\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "12 - Hilton Imperial Dubrovnik",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Hilton Imperial Dubrovnik\",\n    \"price\": 295.00,\n    \"latitude\": 42.6414,\n    \"longitude\": 18.1067\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "13 - Rixos Premium Dubrovnik",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Rixos Premium Dubrovnik\",\n    \"price\": 420.00,\n    \"latitude\": 42.6261,\n    \"longitude\": 18.0636\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "14 - Hotel Niko Zadar",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Hotel Niko Zadar\",\n    \"price\": 95.00,\n    \"latitude\": 44.1194,\n    \"longitude\": 15.2314\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "15 - Falkensteiner Hotel Zadar",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Falkensteiner Hotel Zadar\",\n    \"price\": 175.00,\n    \"latitude\": 44.0986,\n    \"longitude\": 15.2389\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "16 - Hotel Kvarner Opatija",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Hotel Kvarner Opatija\",\n    \"price\": 140.00,\n    \"latitude\": 45.3378,\n    \"longitude\": 14.3050\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "17 - Amadria Park Opatija",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Amadria Park Opatija\",\n    \"price\": 195.00,\n    \"latitude\": 45.3361,\n    \"longitude\": 14.3019\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "18 - Hotel Bonavia Rijeka",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Hotel Bonavia Rijeka\",\n    \"price\": 110.00,\n    \"latitude\": 45.3275,\n    \"longitude\": 14.4422\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "19 - Hotel Neum Pula",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Hotel Neum Pula\",\n    \"price\": 88.00,\n    \"latitude\": 44.8666,\n    \"longitude\": 13.8496\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "20 - Park Plaza Histria Pula",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Park Plaza Histria Pula\",\n    \"price\": 155.00,\n    \"latitude\": 44.8519,\n    \"longitude\": 13.8283\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "21 - Hotel Marko Polo Korcula",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Hotel Marko Polo Korcula\",\n    \"price\": 130.00,\n    \"latitude\": 42.9597,\n    \"longitude\": 17.1358\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "22 - Aminess Lume Hotel Hvar",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Aminess Lume Hotel Hvar\",\n    \"price\": 245.00,\n    \"latitude\": 43.1725,\n    \"longitude\": 16.4411\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "23 - Hotel & Spa Neum Makarska",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Hotel & Spa Neum Makarska\",\n    \"price\": 160.00,\n    \"latitude\": 43.2969,\n    \"longitude\": 17.0189\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "24 - Budget Hostel Makarska",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Budget Hostel Makarska\",\n    \"price\": 40.00,\n    \"latitude\": 43.2944,\n    \"longitude\": 17.0178\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "25 - Bluesun Hotel Soline Brac",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Bluesun Hotel Soline Brac\",\n    \"price\": 175.00,\n    \"latitude\": 43.3256,\n    \"longitude\": 16.6342\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "26 - Hotel Neum Nin",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Hotel Neum Nin\",\n    \"price\": 85.00,\n    \"latitude\": 44.2403,\n    \"longitude\": 15.1789\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "27 - Zaton Holiday Resort",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Zaton Holiday Resort\",\n    \"price\": 120.00,\n    \"latitude\": 44.2167,\n    \"longitude\": 15.1667\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "28 - Hotel Neum Sibenik",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Hotel Neum Sibenik\",\n    \"price\": 92.00,\n    \"latitude\": 43.7350,\n    \"longitude\": 15.8903\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "29 - D-Resort Sibenik",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"D-Resort Sibenik\",\n    \"price\": 310.00,\n    \"latitude\": 43.7339,\n    \"longitude\": 15.8856\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				},
+				{
+					"name": "30 - Hotel Neum Trogir",
+					"event": [{ "listen": "test", "script": { "exec": ["pm.test('Status code is 201', function () { pm.response.to.have.status(201); });"], "type": "text/javascript" }}],
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": { "mode": "raw", "raw": "{\n    \"name\": \"Hotel Neum Trogir\",\n    \"price\": 105.00,\n    \"latitude\": 43.5172,\n    \"longitude\": 16.2519\n}" },
+						"url": { "raw": "{{baseUrl}}/api/hotels", "host": ["{{baseUrl}}"], "path": ["api", "hotels"] }
+					}
+				}
+			]
+		},
+		{
+			"name": "Health Check",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/health",
+							"host": ["{{baseUrl}}"],
+							"path": ["health"]
+						},
+						"description": "Check if the API is healthy and running."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Hotels - CRUD",
+			"item": [
+				{
+					"name": "Create Hotel",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 201', function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test('Response has correct structure', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('id');",
+									"    pm.expect(jsonData).to.have.property('name');",
+									"    pm.expect(jsonData).to.have.property('price');",
+									"    pm.expect(jsonData).to.have.property('latitude');",
+									"    pm.expect(jsonData).to.have.property('longitude');",
+									"    pm.expect(jsonData).to.have.property('createdAt');",
+									"});",
+									"",
+									"// Save hotel ID for subsequent requests",
+									"var jsonData = pm.response.json();",
+									"pm.collectionVariables.set('hotelId', jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Grand Hotel Zagreb\",\n    \"price\": 150.00,\n    \"latitude\": 45.8150,\n    \"longitude\": 15.9819\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/hotels",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "hotels"]
+						},
+						"description": "Creates a new hotel with the specified details."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Hotel - Seaside Resort",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 201', function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Seaside Resort Split\",\n    \"price\": 200.00,\n    \"latitude\": 43.5081,\n    \"longitude\": 16.4402\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/hotels",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "hotels"]
+						},
+						"description": "Creates another hotel for testing search functionality."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Hotel - Budget Option",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 201', function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Budget Inn Dubrovnik\",\n    \"price\": 75.50,\n    \"latitude\": 42.6507,\n    \"longitude\": 18.0944\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/hotels",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "hotels"]
+						},
+						"description": "Creates a budget hotel for testing price-based sorting."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Hotel by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response has correct structure', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('id');",
+									"    pm.expect(jsonData).to.have.property('name');",
+									"    pm.expect(jsonData).to.have.property('price');",
+									"    pm.expect(jsonData).to.have.property('latitude');",
+									"    pm.expect(jsonData).to.have.property('longitude');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/hotels/{{hotelId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "hotels", "{{hotelId}}"]
+						},
+						"description": "Retrieves a hotel by its unique identifier."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Hotel",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Hotel name was updated', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.name).to.eql('Grand Hotel Zagreb - Premium');",
+									"});",
+									"",
+									"pm.test('Hotel price was updated', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.price).to.eql(180.00);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Grand Hotel Zagreb - Premium\",\n    \"price\": 180.00,\n    \"latitude\": 45.8150,\n    \"longitude\": 15.9819\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/hotels/{{hotelId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "hotels", "{{hotelId}}"]
+						},
+						"description": "Updates an existing hotel with new details."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Hotel",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 204', function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/hotels/{{hotelId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "hotels", "{{hotelId}}"]
+						},
+						"description": "Deletes a hotel by its unique identifier."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Hotels - Search",
+			"item": [
+				{
+					"name": "Search Hotels - Zagreb Area",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response has pagination structure', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('items');",
+									"    pm.expect(jsonData).to.have.property('pageNumber');",
+									"    pm.expect(jsonData).to.have.property('pageSize');",
+									"    pm.expect(jsonData).to.have.property('totalCount');",
+									"    pm.expect(jsonData).to.have.property('totalPages');",
+									"});",
+									"",
+									"pm.test('Items have distance information', function () {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.items.length > 0) {",
+									"        pm.expect(jsonData.items[0]).to.have.property('distanceKm');",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/hotels/search?latitude=45.8150&longitude=15.9819&pageNumber=1&pageSize=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "hotels", "search"],
+							"query": [
+								{
+									"key": "latitude",
+									"value": "45.8150",
+									"description": "Zagreb latitude"
+								},
+								{
+									"key": "longitude",
+									"value": "15.9819",
+									"description": "Zagreb longitude"
+								},
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Search for hotels near Zagreb, Croatia. Results are ranked by distance and price."
+					},
+					"response": []
+				},
+				{
+					"name": "Search Hotels - Split Area",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/hotels/search?latitude=43.5081&longitude=16.4402&pageNumber=1&pageSize=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "hotels", "search"],
+							"query": [
+								{
+									"key": "latitude",
+									"value": "43.5081",
+									"description": "Split latitude"
+								},
+								{
+									"key": "longitude",
+									"value": "16.4402",
+									"description": "Split longitude"
+								},
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Search for hotels near Split, Croatia."
+					},
+					"response": []
+				},
+				{
+					"name": "Search Hotels - Custom Pagination",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Page size is respected', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.pageSize).to.eql(5);",
+									"    pm.expect(jsonData.pageNumber).to.eql(1);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/hotels/search?latitude=45.0&longitude=16.0&pageNumber=1&pageSize=5",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "hotels", "search"],
+							"query": [
+								{
+									"key": "latitude",
+									"value": "45.0"
+								},
+								{
+									"key": "longitude",
+									"value": "16.0"
+								},
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "5"
+								}
+							]
+						},
+						"description": "Search with custom pagination settings."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Error Cases",
+			"item": [
+				{
+					"name": "Create Hotel - Invalid (Empty Name)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test('Response is a problem details object', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('errors');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"\",\n    \"price\": 150.00,\n    \"latitude\": 45.8150,\n    \"longitude\": 15.9819\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/hotels",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "hotels"]
+						},
+						"description": "Attempt to create hotel with empty name - should return 400."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Hotel - Invalid (Negative Price)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Test Hotel\",\n    \"price\": -50.00,\n    \"latitude\": 45.8150,\n    \"longitude\": 15.9819\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/hotels",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "hotels"]
+						},
+						"description": "Attempt to create hotel with negative price - should return 400."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Hotel - Invalid (Latitude Out of Range)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Test Hotel\",\n    \"price\": 100.00,\n    \"latitude\": 95.0,\n    \"longitude\": 15.9819\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/hotels",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "hotels"]
+						},
+						"description": "Attempt to create hotel with latitude > 90 - should return 400."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Hotel - Invalid (Longitude Out of Range)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Test Hotel\",\n    \"price\": 100.00,\n    \"latitude\": 45.0,\n    \"longitude\": 200.0\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/hotels",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "hotels"]
+						},
+						"description": "Attempt to create hotel with longitude > 180 - should return 400."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Hotel - Not Found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 404', function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test('Response is a problem details object', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('title');",
+									"    pm.expect(jsonData).to.have.property('status');",
+									"    pm.expect(jsonData.status).to.eql(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/hotels/00000000-0000-0000-0000-000000000000",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "hotels", "00000000-0000-0000-0000-000000000000"]
+						},
+						"description": "Attempt to get a hotel that doesn't exist - should return 404."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Hotel - Not Found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 404', function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Updated Hotel\",\n    \"price\": 200.00,\n    \"latitude\": 45.0,\n    \"longitude\": 16.0\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/hotels/00000000-0000-0000-0000-000000000000",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "hotels", "00000000-0000-0000-0000-000000000000"]
+						},
+						"description": "Attempt to update a hotel that doesn't exist - should return 404."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Hotel - Not Found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 404', function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/hotels/00000000-0000-0000-0000-000000000000",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "hotels", "00000000-0000-0000-0000-000000000000"]
+						},
+						"description": "Attempt to delete a hotel that doesn't exist - should return 404."
+					},
+					"response": []
+				},
+				{
+					"name": "Search Hotels - Invalid Latitude",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/hotels/search?latitude=100&longitude=16.0&pageNumber=1&pageSize=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "hotels", "search"],
+							"query": [
+								{
+									"key": "latitude",
+									"value": "100",
+									"description": "Invalid latitude (> 90)"
+								},
+								{
+									"key": "longitude",
+									"value": "16.0"
+								},
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Search with invalid latitude - should return 400."
+					},
+					"response": []
+				},
+				{
+					"name": "Search Hotels - Invalid Page Number",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/hotels/search?latitude=45.0&longitude=16.0&pageNumber=0&pageSize=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "hotels", "search"],
+							"query": [
+								{
+									"key": "latitude",
+									"value": "45.0"
+								},
+								{
+									"key": "longitude",
+									"value": "16.0"
+								},
+								{
+									"key": "pageNumber",
+									"value": "0",
+									"description": "Invalid page number (< 1)"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Search with invalid page number - should return 400."
+					},
+					"response": []
+				},
+				{
+					"name": "Search Hotels - Invalid Page Size",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 400', function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/hotels/search?latitude=45.0&longitude=16.0&pageNumber=1&pageSize=500",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "hotels", "search"],
+							"query": [
+								{
+									"key": "latitude",
+									"value": "45.0"
+								},
+								{
+									"key": "longitude",
+									"value": "16.0"
+								},
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "500",
+									"description": "Invalid page size (> 100)"
+								}
+							]
+						},
+						"description": "Search with page size > 100 - should return 400."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Duplicate Detection",
+			"item": [
+				{
+					"name": "Create Hotel - For Duplicate Test",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 201', function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"pm.collectionVariables.set('hotelId', jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Unique Test Hotel\",\n    \"price\": 120.00,\n    \"latitude\": 44.1234,\n    \"longitude\": 15.5678\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/hotels",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "hotels"]
+						},
+						"description": "Create a hotel to test duplicate detection."
+					},
+					"response": []
+				},
+				{
+					"name": "Create Hotel - Duplicate (Same Name & Location)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 409 Conflict', function () {",
+									"    pm.response.to.have.status(409);",
+									"});",
+									"",
+									"pm.test('Response indicates duplicate', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('title');",
+									"    pm.expect(jsonData.title).to.include('Duplicate');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Unique Test Hotel\",\n    \"price\": 150.00,\n    \"latitude\": 44.1234,\n    \"longitude\": 15.5678\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/hotels",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "hotels"]
+						},
+						"description": "Attempt to create hotel with same name and location - should return 409 Conflict."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Hotel - Only Price (Should Succeed)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Price was updated', function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.price).to.eql(99.99);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Unique Test Hotel\",\n    \"price\": 99.99,\n    \"latitude\": 44.1234,\n    \"longitude\": 15.5678\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/hotels/{{hotelId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "hotels", "{{hotelId}}"]
+						},
+						"description": "Update only the price of a hotel - should succeed (tests excludeId fix)."
+					},
+					"response": []
+				},
+				{
+					"name": "Cleanup - Delete Test Hotel",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 204', function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/hotels/{{hotelId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "hotels", "{{hotelId}}"]
+						},
+						"description": "Clean up the test hotel."
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
