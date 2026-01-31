@@ -3,3 +3,8 @@ obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
+
+# Log files
+docs/logs/*.txt
+docs/logs/*.log
+!docs/logs/.gitkeep
