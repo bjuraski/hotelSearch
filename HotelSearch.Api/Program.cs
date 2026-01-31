@@ -57,9 +57,22 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader();
+        if (builder.Environment.IsDevelopment())
+        {
+            policy.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        }
+        else
+        {
+            // In production, configure specific origins from configuration
+            var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+                                 ?? Array.Empty<string>();
+            
+            policy.WithOrigins(allowedOrigins)
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        }
     });
 });
 
@@ -68,21 +81,18 @@ var app = builder.Build();
 // Configure middleware pipeline
 app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
-// Enable Swagger in all environments (for demo purposes)
-app.UseSwagger();
-app.UseSwaggerUI(options =>
+// Enable Swagger only in development
+if (app.Environment.IsDevelopment())
 {
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Hotel Search API v1");
-    options.RoutePrefix = string.Empty; // Serve Swagger UI at the root
-    options.DocumentTitle = "Hotel Search API";
-    options.DisplayRequestDuration();
-});
-
-// // Configure the HTTP request pipeline.
-// if (app.Environment.IsDevelopment())
-// {
-//     app.MapOpenApi();
-// }
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Hotel Search API v1");
+        options.RoutePrefix = string.Empty; // Serve Swagger UI at the root
+        options.DocumentTitle = "Hotel Search API";
+        options.DisplayRequestDuration();
+    });
+}
 
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");

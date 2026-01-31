@@ -27,7 +27,8 @@ public class HotelService : IHotelService
         var exists = await _hotelRepository.ExistsByNameAndLocationAsync(
             createHotelDto.Name, 
             createHotelDto.Latitude, 
-            createHotelDto.Longitude, 
+            createHotelDto.Longitude,
+            null,
             cancellationToken);
         
         if (exists)
@@ -56,9 +57,10 @@ public class HotelService : IHotelService
             throw new NotFoundException($"Hotel with ID {id} not found");
 
         var exists = await _hotelRepository.ExistsByNameAndLocationAsync(
-            updateHotelDto.Name, 
-            updateHotelDto.Latitude, 
+            updateHotelDto.Name,
+            updateHotelDto.Latitude,
             updateHotelDto.Longitude,
+            id,
             cancellationToken);
 
         if (exists)
@@ -113,8 +115,10 @@ public class HotelService : IHotelService
             );
         }
         
+        var maxDistance = hotelsWithDistance.Max(x => x.Distance);
+        var maxPrice = hotelsWithDistance.Max(x => x.Hotel.Price);
         var sorted = hotelsWithDistance
-            .OrderBy(h => CalculateScore(h, hotelsWithDistance))
+            .OrderBy(h => CalculateScore(h, maxDistance, maxPrice))
             .ToList();
 
         var totalCount = sorted.Count;
@@ -147,17 +151,11 @@ public class HotelService : IHotelService
     /// Calculates normalized score for hotel ranking.
     /// Lower score = better match (closer and cheaper)
     /// </summary>
-    private static double CalculateScore(HotelWithDistance hotelWithDistance, List<HotelWithDistance> allHotels)
+    private static double CalculateScore(HotelWithDistance hotelWithDistance, double maxDistance, decimal maxPrice)
     {
-        // Normalize distance (0-1 scale)
-        var maxDistance = allHotels.Max(x => x.Distance);
         var normalizedDistance = maxDistance > 0 ? hotelWithDistance.Distance / maxDistance : 0;
-
-        // Normalize price (0-1 scale)
-        var maxPrice = allHotels.Max(x => x.Hotel.Price);
         var normalizedPrice = maxPrice > 0 ? (double)(hotelWithDistance.Hotel.Price / maxPrice) : 0;
-
-        // Combined score (equal weight to distance and price)
+        
         return normalizedDistance + normalizedPrice;
     }
     

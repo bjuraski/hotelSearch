@@ -68,13 +68,14 @@ public class InMemoryHotelRepository : IHotelRepository
         return Task.FromResult(_hotels.ContainsKey(id));
     }
 
-    public Task<bool> ExistsByNameAndLocationAsync(string name, double latitude, double longitude, CancellationToken cancellationToken = default)
+    public Task<bool> ExistsByNameAndLocationAsync(string name, double latitude, double longitude, Guid? excludeId = null, CancellationToken cancellationToken = default)
     {
-        var exists = _hotels.Values.Any(h => 
-            h.Name.Equals(name, StringComparison.OrdinalIgnoreCase) &&  // Case-insensitive
-            Math.Abs(h.Location.Latitude - latitude) < 0.000001 && 
+        var exists = _hotels.Values.Any(h =>
+            (excludeId == null || h.Id != excludeId) &&
+            h.Name.Equals(name, StringComparison.OrdinalIgnoreCase) &&
+            Math.Abs(h.Location.Latitude - latitude) < 0.000001 &&
             Math.Abs(h.Location.Longitude - longitude) < 0.000001);
-        
+
         return Task.FromResult(exists);
     }
 }

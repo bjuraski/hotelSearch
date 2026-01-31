@@ -13,5 +13,5 @@ public interface IHotelRepository
     Task UpdateAsync(Hotel hotel, CancellationToken cancellationToken = default);
     Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
     Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default);
-    Task<bool> ExistsByNameAndLocationAsync(string name, double latitude, double longitude, CancellationToken cancellationToken = default);
+    Task<bool> ExistsByNameAndLocationAsync(string name, double latitude, double longitude, Guid? excludeId = null, CancellationToken cancellationToken = default);
 }

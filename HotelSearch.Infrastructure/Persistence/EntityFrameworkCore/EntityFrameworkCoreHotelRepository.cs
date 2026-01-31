@@ -75,14 +75,15 @@ public class EntityFrameworkCoreHotelRepository : IHotelRepository
             .AnyAsync(h => h.Id == id, cancellationToken);
     }
 
-    public async Task<bool> ExistsByNameAndLocationAsync(string name, double latitude, double longitude, CancellationToken cancellationToken = default)
+    public async Task<bool> ExistsByNameAndLocationAsync(string name, double latitude, double longitude, Guid? excludeId = null, CancellationToken cancellationToken = default)
     {
         await using var dbContext = _dbContextFactory.CreateReadOnly();
         return await dbContext.Hotels
-            .AnyAsync(h => 
-                    EF.Functions.ILike(h.Name, name) && 
-                    Math.Abs(h.Location.Latitude - latitude) < 0.000001 && 
-                    Math.Abs(h.Location.Longitude - longitude) < 0.000001, 
+            .AnyAsync(h =>
+                    (excludeId == null || h.Id != excludeId) &&
+                    EF.Functions.ILike(h.Name, name) &&
+                    Math.Abs(h.Location.Latitude - latitude) < 0.000001 &&
+                    Math.Abs(h.Location.Longitude - longitude) < 0.000001,
                 cancellationToken);
     }
 }
