@@ -12,8 +12,8 @@ public class EntityFrameworkCoreHotelRepository : IHotelRepository
 
     public EntityFrameworkCoreHotelRepository(IHotelSearchDbContextFactory dbContextFactory, ILogger<EntityFrameworkCoreHotelRepository> logger)
     {
-        _dbContextFactory = dbContextFactory ?? throw new ArgumentNullException(nameof(dbContextFactory));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _dbContextFactory = dbContextFactory;
+        _logger = logger;
     }
 
     public async Task<Hotel?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)

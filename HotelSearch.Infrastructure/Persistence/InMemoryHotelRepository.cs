@@ -17,7 +17,7 @@ public class InMemoryHotelRepository : IHotelRepository
     public InMemoryHotelRepository(ILogger<InMemoryHotelRepository> logger)
     {
         _hotels = new ConcurrentDictionary<Guid, Hotel>();
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _logger = logger;
     }
 
     public Task<Hotel?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)

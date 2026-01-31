@@ -16,8 +16,8 @@ public class HotelService : IHotelService
 
     public HotelService(IHotelRepository hotelRepository, ILogger<HotelService> logger)
     {
-        _hotelRepository = hotelRepository ?? throw new ArgumentNullException(nameof(hotelRepository));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _hotelRepository = hotelRepository;
+        _logger = logger;
     }
 
     public async Task<HotelDto> CreateAsync(CreateHotelDto createHotelDto, CancellationToken cancellationToken = default)
