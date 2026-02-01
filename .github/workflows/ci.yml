@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+# Change this when .NET version changes (e.g., '11.0.x' for .NET 11)
+env:
+  DOTNET_VERSION: '10.0.x'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        include-prerelease: true
+
+    - name: Restore dependencies
+      run: dotnet restore HotelSearch.slnx
+
+    - name: Build
+      run: dotnet build HotelSearch.slnx --configuration Release --no-restore
+
+    - name: Run Domain Tests
+      run: dotnet test HotelSearch.Domain.Tests/HotelSearch.Domain.Tests.csproj --configuration Release --no-build --verbosity normal
+
+    - name: Run Application Tests
+      run: dotnet test HotelSearch.Application.Tests/HotelSearch.Application.Tests.csproj --configuration Release --no-build --verbosity normal

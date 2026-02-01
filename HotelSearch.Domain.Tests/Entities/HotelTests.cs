@@ -181,7 +181,7 @@ public class HotelTests
         // Assert
         firstUpdateTime.Should().NotBeNull();
         secondUpdateTime.Should().NotBeNull();
-        secondUpdateTime.Should().BeOnOrAfter(firstUpdateTime!.Value);
+        secondUpdateTime.Should().BeOnOrAfter(firstUpdateTime.Value);
     }
 
     [Theory]

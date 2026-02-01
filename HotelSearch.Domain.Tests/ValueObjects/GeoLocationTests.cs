@@ -322,7 +322,7 @@ public class GeoLocationTests
     public void OperatorEquals_OneNull_ReturnsFalse()
     {
         // Arrange
-        GeoLocation? location1 = new GeoLocation(45.0, 15.0);
+        GeoLocation location1 = new GeoLocation(45.0, 15.0);
         GeoLocation? location2 = null;
 
         // Act & Assert
