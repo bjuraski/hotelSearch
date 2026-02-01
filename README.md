@@ -13,3 +13,4 @@ Hotel Search API is a .NET web service that allows users to manage hotels and se
 - **Flexible Persistence** - Supports both in-memory and PostgreSQL storage
 - **Interactive API Documentation** - Swagger/OpenAPI interface for easy testing
 - **Production-Ready** - Comprehensive logging, health checks, and error handling
+- **CI/CD Pipeline** - GitHub Actions workflow for automated build and testing
