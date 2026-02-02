@@ -20,7 +20,6 @@ public class EntityFrameworkCoreHotelRepository : IHotelRepository
     {
         await using var dbContext = _dbContextFactory.CreateReadOnly();
         return await dbContext.Hotels
-            .AsNoTracking()
             .FirstOrDefaultAsync(h => h.Id == id, cancellationToken);
     }
 
@@ -28,7 +27,6 @@ public class EntityFrameworkCoreHotelRepository : IHotelRepository
     {
         await using var dbContext = _dbContextFactory.CreateReadOnly();
         return await dbContext.Hotels
-            .AsNoTracking()
             .ToListAsync(cancellationToken);
     }
 
